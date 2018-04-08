@@ -43,13 +43,13 @@ public class ShoppingMaze {
             int itemY = items.get(i).getPosition()[1];
             shopGrid[itemX][itemY] = 2;
         }
-        shopGrid[dimX-1][0] = 3;
+        shopGrid[0][0] = 3;
     }
 
-//    public static void main(String[] args) {
-//        ShoppingMaze sm = new ShoppingMaze(5, 5);
-//        int[][] shopGrid = sm.getShopGrid();
-//        System.out.println(Arrays.deepToString(shopGrid).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
-//
-//    }
+    public static void main(String[] args) {
+        ShoppingMaze sm = new ShoppingMaze(5, 5);
+        int[][] shopGrid = sm.getShopGrid();
+        System.out.println(Arrays.deepToString(shopGrid).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
+
+    }
 }

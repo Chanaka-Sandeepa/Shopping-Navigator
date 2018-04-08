@@ -25,7 +25,7 @@ public class ShoppingCart {
         Date date = new SimpleDateFormat("yyyy-mm-dd").parse(sDate);
         item1.setDateOfPurchace(date);
         item1.setPosition(new int[]{1,0});
-        items.add(item1);
+//        items.add(item1);
 
         Item item2 = new Item();
         item2.setCategory("shirt");
