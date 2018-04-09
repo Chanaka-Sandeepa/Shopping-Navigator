@@ -22,10 +22,11 @@ public class ShoppingNavigateController {
     List<Item> items;
     private int[][] shopGrid;
     private int[][] initialGrid;
+    ShoppingMaze sm = new ShoppingMaze(5, 5);
+
 
     public ShoppingNavigateController() throws ParseException {
         ShoppingCart sc =new ShoppingCart();
-        ShoppingMaze sm = new ShoppingMaze(5, 5);
         items = sc.getItems();
         sm.addItemstoMaze(items);
         shopGrid = sm.getShopGrid();
@@ -45,17 +46,19 @@ public class ShoppingNavigateController {
         return list;
     }
 
-    public void calculatePath(){
+    public ArrayList<ArrayList<int []>> calculatePath(){
         MazeSolver mz = new MazeSolver(5, 5, items.size());
         mz.gridBFS(0,0, shopGrid, mz.getMapArray());
-        List<int[]> path = mz.getPath();
-        System.out.println(path);
-        addPathToGrid(path);
+        ArrayList<ArrayList<int[]>> path = mz.getPath();
+//        System.out.println(path);
+//        addPathToGrid(path);
+        return path;
 
     }
 
-    public void addPathToGrid(List<int[]> path){
-        System.out.println(Arrays.deepToString(shopGrid).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
+    public void addPathToGrid(ArrayList<int[]> path){
+//        System.out.println(Arrays.deepToString(path).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
+        shopGrid = sm.copyInitialGrid();
         for (int i = 0; i < path.size(); i++) {
             int xc = path.get(i)[0];
             int yc = path.get(i)[1];
@@ -64,6 +67,7 @@ public class ShoppingNavigateController {
             }
         }
     }
+
 
     public static void main(String[] args) throws ParseException {
         ShoppingNavigateController sn = new ShoppingNavigateController();

@@ -7,27 +7,53 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.example.root.shopping_cart_navigator.Controller.ShoppingNavigateController;
 import com.example.root.shopping_cart_navigator.R;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ShoppingNavigatorView extends AppCompatActivity {
+    ShoppingNavigateController sn =new ShoppingNavigateController();
+    ArrayList<ArrayList<int[]>> paths;
+    private int pathIndex =0;
+
+
+    public ShoppingNavigatorView() throws ParseException {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sopping_navigator_view);
+
+        RelativeLayout lay = (RelativeLayout) findViewById(R.id.activity_sopping_navigator_view);
+        lay.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                try {
+                    getPath();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         ShoppingNavigateController sn = null;
         try {
             sn = new ShoppingNavigateController();
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        paths = sn.calculatePath();
+
         loadActivity(sn);
     }
 
@@ -64,13 +90,18 @@ public class ShoppingNavigatorView extends AppCompatActivity {
         image.setImageBitmap(bitMap);
     }
 
-    public void getPath(View view) throws ParseException {
-        ShoppingNavigateController sn =new ShoppingNavigateController();
-        sn.calculatePath();
-        System.out.println(Arrays.deepToString(sn.getShopGrid()).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
-
-        loadActivity(sn);
+    public void getPath() throws ParseException {
+        if(pathIndex < paths.size()) {
+            sn.addPathToGrid(paths.get(pathIndex));
+            System.out.println(paths);
+            System.out.println(Arrays.deepToString(sn.getShopGrid()).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
+            loadActivity(sn);
+            pathIndex++;
+        }else{
+            System.out.println("Collected all the items");
+        }
     }
+
 
 
 }

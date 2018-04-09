@@ -18,6 +18,7 @@ public class Item {
 
     public String getCategory() {
         return category;
+
     }
 
     public void setCategory(String category) {

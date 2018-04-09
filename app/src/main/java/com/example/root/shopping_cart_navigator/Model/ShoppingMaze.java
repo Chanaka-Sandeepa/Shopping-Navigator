@@ -12,11 +12,13 @@ public class ShoppingMaze {
     private int dimX;
     private int dimY;
     private int[][] shopGrid;
+    private int[][] initialGrid;
 
     public ShoppingMaze(int dimX, int dimY) {
         this.dimX = dimX;
         this.dimY = dimY;
         shopGrid = new int[dimX][dimY];
+        initialGrid = new int[dimX][dimY];
         this.initGrid();
 
     }
@@ -44,6 +46,13 @@ public class ShoppingMaze {
             shopGrid[itemX][itemY] = 2;
         }
         shopGrid[0][0] = 3;
+    }
+
+    public int[][] copyInitialGrid(){
+        int [][] newGrid = new int[shopGrid.length][];
+        for(int i = 0; i < shopGrid.length; i++)
+            newGrid[i] = shopGrid[i].clone();
+        return newGrid;
     }
 
     public static void main(String[] args) {
