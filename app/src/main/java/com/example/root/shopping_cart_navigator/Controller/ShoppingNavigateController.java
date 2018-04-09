@@ -57,7 +57,10 @@ public class ShoppingNavigateController {
     }
 
     public void addPathToGrid(ArrayList<int[]> path){
-//        System.out.println(Arrays.deepToString(path).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
+        for (int i = 0; i < path.size(); i++) {
+            System.out.print(Arrays.toString(path.get(i)));
+        }
+        System.out.println("");
         shopGrid = sm.copyInitialGrid();
         for (int i = 0; i < path.size(); i++) {
             int xc = path.get(i)[0];
