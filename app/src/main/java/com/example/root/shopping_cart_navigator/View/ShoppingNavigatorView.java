@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -18,12 +19,15 @@ import com.example.root.shopping_cart_navigator.R;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 
 public class ShoppingNavigatorView extends AppCompatActivity {
     ShoppingNavigateController sn =new ShoppingNavigateController();
     ArrayList<ArrayList<int[]>> paths;
     private int pathIndex =0;
 
+    TextToSpeech tts;
+    String text;
 
     public ShoppingNavigatorView() throws ParseException {
     }
@@ -54,7 +58,19 @@ public class ShoppingNavigatorView extends AppCompatActivity {
         }
         paths = sn.calculatePath();
 
+        //text to speech
+        tts=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != TextToSpeech.ERROR) {
+                    tts.setLanguage(Locale.UK);
+                }
+            }
+        });
+
         loadActivity(sn);
+
+
     }
 
     public void loadActivity(ShoppingNavigateController sn){
@@ -65,9 +81,9 @@ public class ShoppingNavigatorView extends AppCompatActivity {
         Bitmap[] bitmaps = {
                 BitmapFactory.decodeResource(getResources(), R.drawable.box),
                 BitmapFactory.decodeResource(getResources(), R.drawable.lines),
-                BitmapFactory.decodeResource(getResources(), R.drawable.plain_coin_2_1),
+                BitmapFactory.decodeResource(getResources(), R.drawable.coin2),
                 BitmapFactory.decodeResource(getResources(), R.drawable.here),
-                BitmapFactory.decodeResource(getResources(), R.drawable.path),
+                BitmapFactory.decodeResource(getResources(), R.drawable.path2),
         };
 
 
@@ -88,6 +104,9 @@ public class ShoppingNavigatorView extends AppCompatActivity {
         //p.setAlpha(0x80); //
         maze.drawMaze(canvas, 0, 0);
         image.setImageBitmap(bitMap);
+
+        text = "tap the screen to go to the first item";
+        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
     }
 
     public void getPath() throws ParseException {
@@ -97,8 +116,12 @@ public class ShoppingNavigatorView extends AppCompatActivity {
             System.out.println(Arrays.deepToString(sn.getShopGrid()).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
             loadActivity(sn);
             pathIndex++;
+            text = "tap the screen after collecting the item to go to the next item";
+            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
         }else{
             System.out.println("Collected all the items");
+            text = "You have collected all the items";
+            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
         }
     }
 
