@@ -75,12 +75,16 @@ public class ShoppingNavigatorView extends AppCompatActivity {
             }
         });
 
-        loadActivity(sn);
+        try {
+            loadActivity(sn);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
 
     }
 
-    public void loadActivity(ShoppingNavigateController sn){
+    public void loadActivity(ShoppingNavigateController sn) throws InterruptedException {
 
         ImageView image=(ImageView)findViewById(R.id.imageView1);
 
@@ -114,6 +118,7 @@ public class ShoppingNavigatorView extends AppCompatActivity {
 
         text = "tap the screen to go to the first item";
         tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+        TimeUnit.SECONDS.sleep(3);
     }
 
     public void getPath() throws ParseException, InterruptedException {
