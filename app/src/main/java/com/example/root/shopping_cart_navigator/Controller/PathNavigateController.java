@@ -70,13 +70,101 @@ public class PathNavigateController {
 
     }
 
-    public ArrayList<ArrayList<Map<Character, Integer>>> getDirectionList(ArrayList<ArrayList<int[]>> paths){
+    public ArrayList<ArrayList<String>> getDirectionList(ArrayList<ArrayList<int[]>> paths){
         ArrayList<ArrayList<Map<Character, Integer>>> dirList = new ArrayList<>();
         for (int i = 0; i < paths.size(); i++) {
             dirList.add(getDirection(paths.get(i)));
         }
         System.out.println(dirList);
-        return dirList;
+        return convertToText(dirList);
+    }
+
+    public ArrayList<ArrayList<String>> convertToText (ArrayList<ArrayList<Map<Character, Integer>>> pathList){
+        ArrayList<ArrayList<String>> textPath = new ArrayList<>();
+        Character currentDir = 'S';
+        for (ArrayList<Map<Character, Integer>> subPath : pathList){
+            ArrayList<String> textSubPath = new ArrayList<>();
+            for (Map<Character, Integer> dir : subPath){
+                String step ="";
+                switch (dir.keySet().iterator().next()){
+                    case 'S':
+                        switch (currentDir){
+                            case 'S':
+                                step = step.concat("go straight ");
+                                break;
+                            case 'E':
+                                step = step.concat("turn right and go ");
+                                break;
+                            case 'N':
+                                step = step.concat("turn back and go ");
+                                break;
+                            case 'W':
+                                step = step.concat("turn left and go ");
+                                break;
+                        }
+                        currentDir = 'S';
+                        break;
+                    case 'E':
+                        switch (currentDir){
+                            case 'S':
+                                step = step.concat("turn left and go ");
+                                break;
+                            case 'E':
+                                step = step.concat("go straight ");
+                                break;
+                            case 'N':
+                                step = step.concat("turn right and go ");
+                                break;
+                            case 'W':
+                                step = step.concat("turn back and go ");
+                                break;
+                        }
+                        currentDir = 'E';
+                        break;
+                    case 'N':
+                        switch (currentDir){
+                            case 'S':
+                                step = step.concat("turn back and go ");
+                                break;
+                            case 'E':
+                                step = step.concat("turn left and go ");
+                                break;
+                            case 'N':
+                                step = step.concat("go straight ");
+                                break;
+                            case 'W':
+                                step = step.concat("turn right and go ");
+                                break;
+                        }
+                        currentDir = 'N';
+                        break;
+                    case 'W':
+                        switch (currentDir){
+                            case 'S':
+                                step = step.concat("turn right and go ");
+                                break;
+                            case 'E':
+                                step = step.concat("turn back and go ");
+                                break;
+                            case 'N':
+                                step = step.concat("turn left and go ");
+                                break;
+                            case 'W':
+                                step = step.concat("go straight ");
+                                break;
+                        }
+                        currentDir = 'W';
+                        break;
+                }
+                System.out.println(step);
+                int stepCount = dir.get(dir.keySet().iterator().next());
+                step = step.concat(stepCount+ " meters");
+                textSubPath.add(step);
+            }
+            textPath.add(textSubPath);
+
+        }
+        return textPath;
     }
 
     public static void main(String[] args) {

@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.example.root.shopping_cart_navigator.Controller.PathNavigateController;
 import com.example.root.shopping_cart_navigator.Controller.ShoppingNavigateController;
 import com.example.root.shopping_cart_navigator.R;
 
@@ -20,9 +21,12 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class ShoppingNavigatorView extends AppCompatActivity {
     ShoppingNavigateController sn =new ShoppingNavigateController();
+    PathNavigateController pn = new PathNavigateController();
+    ArrayList<ArrayList<String>> textPaths;
     ArrayList<ArrayList<int[]>> paths;
     private int pathIndex =0;
 
@@ -46,6 +50,8 @@ public class ShoppingNavigatorView extends AppCompatActivity {
                     getPath();
                 } catch (ParseException e) {
                     e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -57,6 +63,7 @@ public class ShoppingNavigatorView extends AppCompatActivity {
             e.printStackTrace();
         }
         paths = sn.calculatePath();
+        textPaths = pn.getDirectionList(paths);
 
         //text to speech
         tts=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
@@ -109,15 +116,22 @@ public class ShoppingNavigatorView extends AppCompatActivity {
         tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
     }
 
-    public void getPath() throws ParseException {
+    public void getPath() throws ParseException, InterruptedException {
         if(pathIndex < paths.size()) {
             sn.addPathToGrid(paths.get(pathIndex));
             System.out.println(paths);
             System.out.println(Arrays.deepToString(sn.getShopGrid()).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
             loadActivity(sn);
+
+
+            for(String dir: textPaths.get(pathIndex)){
+                tts.speak(dir, TextToSpeech.QUEUE_FLUSH, null);
+                TimeUnit.SECONDS.sleep(3);
+            }
             pathIndex++;
-            text = "tap the screen after collecting the item to go to the next item";
+            text = "tap the screen after collecting the item";
             tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+
         }else{
             System.out.println("Collected all the items");
             text = "You have collected all the items";
