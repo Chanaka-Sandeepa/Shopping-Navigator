@@ -80,7 +80,13 @@ public class ShoppingNavigatorView extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
+        text = "tap the screen to go to the first item";
+        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+        try {
+            TimeUnit.SECONDS.sleep(3);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -116,9 +122,6 @@ public class ShoppingNavigatorView extends AppCompatActivity {
         maze.drawMaze(canvas, 0, 0);
         image.setImageBitmap(bitMap);
 
-        text = "tap the screen to go to the first item";
-        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
-        TimeUnit.SECONDS.sleep(3);
     }
 
     public void getPath() throws ParseException, InterruptedException {
